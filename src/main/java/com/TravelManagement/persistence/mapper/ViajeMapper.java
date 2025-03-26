@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface ViajeMapper {
     // Mapeo de Viaje a ViajeDTO
     @Mapping(source = "viajeId", target = "viajeId")
-    @Mapping(source = "vehiculoId", target = "vehiculoId")
+    @Mapping(source = "vehiculo.vehiculoId", target = "vehiculoId")
     @Mapping(source = "origen", target = "origen")
     @Mapping(source = "destino", target = "destino")
     @Mapping(source = "fechaSalida", target = "fechaSalida")
@@ -21,7 +21,7 @@ public interface ViajeMapper {
 
     // Mapeo inverso de ViajeDTO a Viaje
     @InheritInverseConfiguration
-    @Mapping(target = "vehiculo", source = "vehiculoId")
+    @Mapping(target = "vehiculo", ignore = true)
     @Mapping(target = "reservas", ignore = true) // Ignoramos el mapeo de reservas para evitar recursividad
     Viaje toViaje(ViajeDTO viajeDTO);
 

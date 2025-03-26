@@ -1,5 +1,6 @@
 package com.TravelManagement.persistence.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class Reserva {
     @JoinColumn(name = "viaje_id", nullable = false)
     private Viaje viaje;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;

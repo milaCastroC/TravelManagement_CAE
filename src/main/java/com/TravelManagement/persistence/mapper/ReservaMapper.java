@@ -13,7 +13,7 @@ public interface ReservaMapper {
 
     // Mapeo de Reserva a ReservaDTO
     @Mapping(source = "reservaId", target = "reservaId")
-    @Mapping(source = "viajeId", target = "viajeId")
+    @Mapping(source = "viaje.viajeId", target = "viajeId")
     @Mapping(source = "cliente.clienteId", target = "clienteId")
     @Mapping(source = "estado", target = "estado")
     @Mapping(source = "fechaReserva", target = "fechaReserva")
@@ -21,8 +21,8 @@ public interface ReservaMapper {
 
     // Mapeo inverso de ReservaDTO a Reserva
     @InheritInverseConfiguration
-    @Mapping(target = "viaje", source = "viajeId")
-    @Mapping(target = "cliente", source = "clienteId")
+    @Mapping(target = "viaje", ignore = true)
+    @Mapping(target = "cliente", ignore = true)
     Reserva toReserva(ReservaDTO reservaDTO);
 
     // Método de mapeo para convertir Long (viajeId) a Viaje
