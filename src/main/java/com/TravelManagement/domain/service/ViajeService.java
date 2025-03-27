@@ -9,16 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Service
-public class ViajeServicio {
+public class ViajeService {
 
-    private static final Logger log = LoggerFactory.getLogger(ViajeServicio.class);
+    private static final Logger log = LoggerFactory.getLogger(ViajeService.class);
 
     @Autowired
     private ViajeRepository viajeRepository;

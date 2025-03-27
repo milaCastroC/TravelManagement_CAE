@@ -1,27 +1,21 @@
 package com.TravelManagement.web.controller;
 
-import com.TravelManagement.domain.dto.VehiculoDTO;
 import com.TravelManagement.domain.dto.ViajeDTO;
-import com.TravelManagement.domain.service.ViajeServicio;
+import com.TravelManagement.domain.service.ViajeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/viajes")
 public class ViajeController {
 
     @Autowired
-    private ViajeServicio viajeServicio;
+    private ViajeService viajeService;
 
     @Operation(summary = "Registrar nuevo viaje", description = "Crea un nuevo viaje en el sistema")
     @ApiResponses(value = {
@@ -31,7 +25,7 @@ public class ViajeController {
     @PostMapping("/save")
     public ResponseEntity<?> registrarViaje(@RequestBody ViajeDTO viajeDTO) {
         try {
-            ViajeDTO nuevoViaje = viajeServicio.registrarViaje(viajeDTO);
+            ViajeDTO nuevoViaje = viajeService.registrarViaje(viajeDTO);
             return new ResponseEntity<>(nuevoViaje, HttpStatus.CREATED);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -45,7 +39,7 @@ public class ViajeController {
     })
     @GetMapping("/all")
     public ResponseEntity<Iterable<ViajeDTO>> findAll(){
-            Iterable<ViajeDTO> viajes = viajeServicio.findAll();
+            Iterable<ViajeDTO> viajes = viajeService.findAll();
             return new ResponseEntity<>(viajes, HttpStatus.OK);
     }
 
@@ -62,7 +56,7 @@ public class ViajeController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Datos del viaje incompletos");
             }
 
-            ViajeDTO viajeActualizado = viajeServicio.actualizarViaje(viajeDTO);
+            ViajeDTO viajeActualizado = viajeService.actualizarViaje(viajeDTO);
             return ResponseEntity.ok(viajeActualizado);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
@@ -80,7 +74,7 @@ public class ViajeController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarViaje(@PathVariable Long id) {
         try {
-            viajeServicio.eliminarViaje(id);
+            viajeService.eliminarViaje(id);
             return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
