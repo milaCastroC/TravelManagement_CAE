@@ -18,11 +18,15 @@ public class ClienteService {
 
     //Guardar un cliente
     public ClienteDTO save(ClienteDTO clienteDTO) {
-        return clienteRepository.save(clienteDTO);
+        if(clienteRepository.findByIdentificacion(clienteDTO.getIdentificacion()).isEmpty()){
+             return clienteRepository.save(clienteDTO);
+        }
+        throw new IllegalArgumentException("El registro ya existe");
     }
 
     //Buscar clientes
     public Iterable<ClienteDTO> findAll() {
+
         return clienteRepository.findAll();
     }
 
@@ -33,11 +37,19 @@ public class ClienteService {
 
     //Actualizar un cliente
     public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
-        return clienteRepository.update(clienteDTO);
+        if(clienteRepository.findByIdentificacion(clienteDTO.getIdentificacion()) != null){
+            return clienteRepository.update(clienteDTO);
+        }
+        throw new IllegalArgumentException("El cliente no existe");
     }
 
-    //Eliminar cliente
+//    Eliminar cliente
     public boolean deleteCliente(String identificacion) {
-        return clienteRepository.deleteByIdentificacion(identificacion);
+        Optional<ClienteDTO> cliente = clienteRepository.findByIdentificacion(identificacion);
+        if (!cliente.isEmpty()) {
+            clienteRepository.deleteByIdentificacion(identificacion);
+            return true;
+        }
+        return false;
     }
 }

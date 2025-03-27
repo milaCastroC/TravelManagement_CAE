@@ -25,7 +25,7 @@ public class ClienteRepositoryImpl implements ClienteRepository {
     @Override
     public ClienteDTO save(ClienteDTO clienteDTO) {
         Cliente cliente = clienteMapper.toCliente(clienteDTO);
-        if(findByIdentificacion(clienteDTO.getIdentificacion()) != null){
+        if(findByIdentificacion(clienteDTO.getIdentificacion()).isEmpty()){
             Cliente savedCliente = clienteCrudRepository.save(cliente);
             return clienteMapper.toClienteDTO(savedCliente);
         }
@@ -75,13 +75,6 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         // Verificar si el cliente existe
         Cliente cliente = clienteCrudRepository.findByIdentificacion(identificacion)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con identificación: " + identificacion));
-
-        // Verificar si el cliente tiene reservas activas con una consulta a la BD
-        boolean tieneReservasActivas = clienteCrudRepository.existsClienteByIdentificacionAndReservasEstado(identificacion, "ACTIVA");
-
-        if (tieneReservasActivas) {
-            throw new IllegalStateException("No se puede eliminar el cliente, tiene reservas activas.");
-        }
 
         // Si no tiene reservas activas, eliminar el cliente
         clienteCrudRepository.delete(cliente);

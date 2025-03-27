@@ -29,7 +29,7 @@ public class Reserva {
     private Cliente cliente;
 
     @Column(nullable = false)
-    private String estado;
+    private estadoReserva estado;
 
     @Column(name = "fecha_reserva", nullable = false, updatable = false)
     private LocalDateTime fechaReserva = LocalDateTime.now();

@@ -19,6 +19,7 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+    //Guardar un cliente
     @Operation(summary = "Guardar un nuevo cliente", description = "Guardar un nuevo cliente en el sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cliente creado exitosamente"),

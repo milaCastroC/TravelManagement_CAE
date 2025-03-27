@@ -2,7 +2,6 @@ package com.TravelManagement.domain.repository;
 
 import com.TravelManagement.domain.dto.ClienteDTO;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ClienteRepository {
