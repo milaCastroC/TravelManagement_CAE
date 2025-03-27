@@ -12,11 +12,14 @@ public interface ViajeMapper {
     // Mapeo de Viaje a ViajeDTO
     @Mapping(source = "viajeId", target = "viajeId")
     @Mapping(source = "vehiculo.vehiculoId", target = "vehiculoId")
+    @Mapping(source = "vehiculo.placa", target = "placaVehiculo")
+    @Mapping(source = "vehiculo.capacidad", target = "capacidadVehiculo")
     @Mapping(source = "origen", target = "origen")
     @Mapping(source = "destino", target = "destino")
     @Mapping(source = "fechaSalida", target = "fechaSalida")
     @Mapping(source = "fechaLlegada", target = "fechaLlegada")
     @Mapping(source = "precio", target = "precio")
+    @Mapping(expression = "java(viaje.getReservas() != null ? viaje.getAsientosDisponibles() : viaje.getVehiculo().getCapacidad())", target = "asientosDisponibles")
     ViajeDTO toViajeDto(Viaje viaje);
 
     // Mapeo inverso de ViajeDTO a Viaje

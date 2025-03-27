@@ -12,6 +12,9 @@ public interface VehiculoRepository {
     //Buscar un vehiculo por placa
     Optional<VehiculoDTO> findByPlaca(String placa);
 
+    //Buscar vehículo por id
+    Optional<VehiculoDTO> findById(Long vehiculoId);
+
     //Buscar todos los vehículos
     Iterable<VehiculoDTO> findAll();
 

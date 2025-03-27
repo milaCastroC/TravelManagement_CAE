@@ -39,6 +39,12 @@ public class VehiculoRepositoryImpl implements VehiculoRepository {
         return vehiculo.map(vehiculoMapper::toVehiculoDTO);
     }
 
+    @Override
+    public Optional<VehiculoDTO> findById(Long vehiculoId) {
+        return vehiculoCrudRepository.findById(vehiculoId)
+                .map(vehiculoMapper::toVehiculoDTO);
+    }
+
     //Consultar todos los clientes
     @Override
     public Iterable<VehiculoDTO> findAll() {

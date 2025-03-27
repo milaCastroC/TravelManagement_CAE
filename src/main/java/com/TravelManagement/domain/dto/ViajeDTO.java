@@ -20,6 +20,11 @@ public class ViajeDTO {
     private LocalDateTime fechaLlegada;
     private Double precio;
 
+    // Campos calculados o de visualización
+    private String placaVehiculo;
+    private Integer capacidadVehiculo;
+    private Integer asientosDisponibles;
+
     public ViajeDTO(Long viajeId, Long vehiculoId, String origen, String destino, LocalDateTime fechaSalida, LocalDateTime fechaLlegada, Double precio) {
         this.viajeId = viajeId;
         this.vehiculoId = vehiculoId;

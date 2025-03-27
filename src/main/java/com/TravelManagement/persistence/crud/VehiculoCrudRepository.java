@@ -1,6 +1,5 @@
 package com.TravelManagement.persistence.crud;
 
-import com.TravelManagement.domain.dto.VehiculoDTO;
 import com.TravelManagement.persistence.entity.Vehiculo;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
