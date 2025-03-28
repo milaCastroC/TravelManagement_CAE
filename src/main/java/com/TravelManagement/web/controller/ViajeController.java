@@ -20,7 +20,8 @@ public class ViajeController {
     @Operation(summary = "Registrar nuevo viaje", description = "Crea un nuevo viaje en el sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Viaje creado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Datos del viaje inválidos")
+            @ApiResponse(responseCode = "400", description = "Datos del viaje inválidos"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PostMapping("/save")
     public ResponseEntity<?> registrarViaje(@RequestBody ViajeDTO viajeDTO) {
@@ -47,7 +48,8 @@ public class ViajeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Viaje actualizado"),
             @ApiResponse(responseCode = "400", description = "Datos inválidos"),
-            @ApiResponse(responseCode = "404", description = "Viaje no encontrado")
+            @ApiResponse(responseCode = "404", description = "Viaje no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PutMapping("/update")
     public ResponseEntity<?> actualizarViaje(@RequestBody ViajeDTO viajeDTO) {
@@ -69,13 +71,14 @@ public class ViajeController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Viaje eliminado"),
             @ApiResponse(responseCode = "400", description = "No se puede eliminar el viaje"),
-            @ApiResponse(responseCode = "404", description = "Viaje no encontrado")
+            @ApiResponse(responseCode = "404", description = "Viaje no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarViaje(@PathVariable Long id) {
         try {
             viajeService.eliminarViaje(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Vehículo eliminado exitosamente");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (RuntimeException e) {

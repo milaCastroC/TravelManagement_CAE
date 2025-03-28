@@ -23,7 +23,8 @@ public class ReservaController {
     @Operation(summary = "Crear reserva", description = "Realiza una reserva a un cliente para un viaje disponible")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Reserva creada exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Error en los datos de reserva")
+            @ApiResponse(responseCode = "400", description = "Error en los datos de reserva"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PostMapping("/save")
     public ResponseEntity<?> crearReserva(@RequestBody ReservaDTO reservaDTO) {
@@ -51,7 +52,8 @@ public class ReservaController {
     @Operation(summary = "Consultar reservas por cliente", description = "Obtiene la lista de reservas de un cliente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reservas del cliente obtenidas exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Cliente o reservas no encontrados")
+            @ApiResponse(responseCode = "404", description = "Cliente o reservas no encontrados"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @GetMapping("/cliente/{clienteId}")
     public ResponseEntity<?> findByCliente(@PathVariable Long clienteId) {
@@ -68,7 +70,8 @@ public class ReservaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reserva actualizada exitosamente"),
             @ApiResponse(responseCode = "400", description = "Error en los datos o reserva no modificable"),
-            @ApiResponse(responseCode = "404", description = "Reserva no encontrada")
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PutMapping("/update")
     public ResponseEntity<?> actualizarReserva(@RequestBody ReservaDTO reservaDTO) {
@@ -85,7 +88,8 @@ public class ReservaController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reserva cancelada exitosamente"),
             @ApiResponse(responseCode = "400", description = "No se puede cancelar la reserva"),
-            @ApiResponse(responseCode = "404", description = "Reserva no encontrada")
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PatchMapping("/cancel/{id}")
     public ResponseEntity<?> cancelarReserva(@PathVariable Long id) {
@@ -94,6 +98,26 @@ public class ReservaController {
             return ResponseEntity.ok().build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+
+    //Eliminar reserva
+    @Operation(summary = "Eliminar reserva", description = "Elimina un reserva del sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Resrva eliminada"),
+            @ApiResponse(responseCode = "400", description = "No se puede eliminar la reserva"),
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
+    })
+    @DeleteMapping("delete/{id}")
+    public ResponseEntity<?> eliminarReserva(@PathVariable Long id) {
+        try {
+            reservaService.eliminarReserva(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
         }
     }
 }

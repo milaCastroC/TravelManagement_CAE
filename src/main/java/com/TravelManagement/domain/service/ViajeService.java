@@ -11,13 +11,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @Service
 public class ViajeService {
-
-    private static final Logger log = LoggerFactory.getLogger(ViajeService.class);
 
     @Autowired
     private ViajeRepository viajeRepository;
@@ -29,7 +24,6 @@ public class ViajeService {
     private ViajeMapper viajeMapper;
 
     private void validarViaje(ViajeDTO viajeDTO) {
-        log.info("Buscando vehículo con ID: {}", viajeDTO.getVehiculoId());
         // Validar fechas
         if (viajeDTO.getFechaSalida().isBefore(LocalDateTime.now())) {
             throw new IllegalArgumentException("La fecha de salida no puede ser en el pasado");
@@ -47,7 +41,6 @@ public class ViajeService {
         // Validar vehículo
         VehiculoDTO vehiculo = vehiculoRepository.findById(viajeDTO.getVehiculoId())
                 .orElseThrow(() -> {
-                    log.error("Vehículo con ID {} no encontrado", viajeDTO.getVehiculoId());
                     return new IllegalArgumentException("Vehículo no encontrado");
                 });
 
@@ -88,9 +81,7 @@ public class ViajeService {
     }
 
     public ViajeDTO registrarViaje(ViajeDTO viajeDTO) {
-        log.info("Intentando registrar viaje con vehículoId: {}", viajeDTO.getVehiculoId());
         Optional<VehiculoDTO> vehiculo = vehiculoRepository.findById(viajeDTO.getVehiculoId());
-        log.info("Vehículo encontrado en BD: {}", vehiculo.isPresent());
 
         validarViaje(viajeDTO);
         return viajeRepository.save(viajeDTO);

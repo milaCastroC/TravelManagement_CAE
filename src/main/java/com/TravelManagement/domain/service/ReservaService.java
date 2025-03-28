@@ -117,6 +117,13 @@ public class ReservaService {
         reservaRepository.cancelar(reservaId);
     }
 
+    public void eliminarReserva(Long id) {
+        ReservaDTO reservaExistente = reservaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Reserva no encontrada"));
+
+        reservaRepository.eliminar(id);
+    }
+
     // Método para actualizar el estado de una reserva (control de estado)
     public ReservaDTO actualizarEstadoReserva(Long reservaId, String nuevoEstado) {
         ReservaDTO reservaExistente = reservaRepository.findById(reservaId)

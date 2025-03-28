@@ -23,7 +23,8 @@ public class VehiculoController {
     @Operation(summary = "Guardar un nuevo vehículo", description = "Registra un nuevo vehículo en el sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Vehículo creado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "El vehículo ya existe o datos inválidos")
+            @ApiResponse(responseCode = "400", description = "El vehículo ya existe o datos inválidos"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PostMapping("/save")
     public ResponseEntity<?> saveVehiculo(@RequestBody VehiculoDTO vehiculoDTO) {
@@ -51,7 +52,8 @@ public class VehiculoController {
     @Operation(summary = "Buscar vehículo por placa", description = "Obtiene un vehículo específico por su número de placa")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Vehículo encontrado"),
-            @ApiResponse(responseCode = "404", description = "Vehículo no encontrado")
+            @ApiResponse(responseCode = "404", description = "Vehículo no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @GetMapping("/find/{placa}")
     public ResponseEntity<VehiculoDTO> findByPlaca(@PathVariable String placa) {
@@ -65,7 +67,8 @@ public class VehiculoController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Vehículo actualizado exitosamente"),
             @ApiResponse(responseCode = "404", description = "Vehículo no encontrado"),
-            @ApiResponse(responseCode = "400", description = "Datos inválidos para actualización")
+            @ApiResponse(responseCode = "400", description = "Datos inválidos para actualización"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PutMapping("/update")
     public ResponseEntity<VehiculoDTO> updateVehiculo(@RequestBody VehiculoDTO vehiculoDTO) {
@@ -84,7 +87,8 @@ public class VehiculoController {
     @Operation(summary = "Eliminar un vehículo", description = "Elimina un vehículo del sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Vehículo eliminado exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Vehículo no encontrado")
+            @ApiResponse(responseCode = "404", description = "Vehículo no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @DeleteMapping("/delete/{placa}")
     public ResponseEntity<String> deleteVehiculo(@PathVariable String placa) {

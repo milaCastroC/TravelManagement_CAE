@@ -22,8 +22,11 @@ public interface ReservaRepository {
     // Actualizar una reserva
     ReservaDTO update(ReservaDTO reservaDTO);
 
-    // Eliminar una reserva (o cancelar)
+    //Cancelar una reserva
     void cancelar(Long reservaId);
+
+    //Eliminar una reserva
+    void eliminar(Long reservaId);
 
     // Verificar si ya existe una reserva para el mismo viaje y cliente
     Optional<ReservaDTO> findByViajeIdAndClienteId(Long viajeId, Long clienteId);

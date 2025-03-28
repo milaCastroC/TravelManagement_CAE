@@ -80,6 +80,11 @@ public class ReservaRepositoryImpl implements ReservaRepository {
     }
 
     @Override
+    public void eliminar(Long reservaId) {
+        reservaCrudRepository.deleteById(reservaId);
+    }
+
+    @Override
     public Optional<ReservaDTO> findByViajeIdAndClienteId(Long viajeId, Long clienteId) {
         return reservaCrudRepository.findByViajeIdAndClienteId(viajeId, clienteId)
                 .map(reservaMapper::toReservaDto);

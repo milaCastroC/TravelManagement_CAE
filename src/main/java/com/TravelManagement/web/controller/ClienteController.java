@@ -23,7 +23,8 @@ public class ClienteController {
     @Operation(summary = "Guardar un nuevo cliente", description = "Guardar un nuevo cliente en el sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Cliente creado exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Error al crear el cliente")
+            @ApiResponse(responseCode = "400", description = "Error al crear el cliente"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PostMapping("/save")
     public ResponseEntity<ClienteDTO> saveCliente(@RequestBody ClienteDTO clienteDTO){
@@ -47,7 +48,8 @@ public class ClienteController {
     @Operation(summary = "Buscar cliente por identificación", description = "Busca un cliente usando su número de identificación")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
-            @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @GetMapping("/find/{identificacion}")
     public ResponseEntity<ClienteDTO> findByIdentificacion(@PathVariable String identificacion){
@@ -62,7 +64,8 @@ public class ClienteController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente actualizado exitosamente"),
             @ApiResponse(responseCode = "404", description = "Cliente no encontrado"),
-            @ApiResponse(responseCode = "400", description = "Datos de actualización inválidos")
+            @ApiResponse(responseCode = "400", description = "Datos de actualización inválidos"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @PutMapping("/update")
     public ResponseEntity<ClienteDTO> updateCliente(@RequestBody ClienteDTO clienteDTO) {
@@ -85,7 +88,8 @@ public class ClienteController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente eliminado exitosamente"),
             @ApiResponse(responseCode = "400", description = "No se puede eliminar cliente con reservas activas"),
-            @ApiResponse(responseCode = "404", description = "Cliente no encontrado")
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado"),
+            @ApiResponse(responseCode = "500", description = "Error en el servidor")
     })
     @DeleteMapping("/delete/{identificacion}")
     public ResponseEntity<String> deleteCliente(@PathVariable String identificacion) {
