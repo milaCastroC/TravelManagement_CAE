@@ -39,6 +39,12 @@ public class ClienteRepositoryImpl implements ClienteRepository {
         return cliente.map(clienteMapper::toClienteDTO);
     }
 
+    @Override
+    public Optional<ClienteDTO> findById(Long clienteId) {
+        return clienteCrudRepository.findById(clienteId)
+                .map(clienteMapper::toClienteDTO);
+    }
+
     //Consultar todos los clientes
     @Override
     public Iterable<ClienteDTO> findAll() {

@@ -28,8 +28,9 @@ public class Reserva {
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
 
-    @Column(nullable = false)
-    private estadoReserva estado;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, columnDefinition = "enum_estado")
+    private EstadoReserva estado;
 
     @Column(name = "fecha_reserva", nullable = false, updatable = false)
     private LocalDateTime fechaReserva = LocalDateTime.now();

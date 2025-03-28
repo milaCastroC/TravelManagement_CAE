@@ -12,6 +12,9 @@ public interface ClienteRepository {
         //Buscar cliente por identificacion
         Optional<ClienteDTO> findByIdentificacion(String identificacion);
 
+        //Buscar por id
+        Optional<ClienteDTO> findById(Long clienteId);
+
         //Buscar todos los clientes
         Iterable<ClienteDTO> findAll();
 
