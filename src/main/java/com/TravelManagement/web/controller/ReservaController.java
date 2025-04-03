@@ -23,8 +23,16 @@ public class ReservaController {
     @Operation(summary = "Crear reserva", description = "Realiza una reserva a un cliente para un viaje disponible")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Reserva creada exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Error en los datos de reserva"),
-            @ApiResponse(responseCode = "500", description = "Error en el servidor")
+            @ApiResponse(responseCode = "400", description = "Datos inválidos - Campos faltantes o formato incorrecto"),
+            @ApiResponse(responseCode = "401", description = "No autorizado - Autenticación requerida"),
+            @ApiResponse(responseCode = "403", description = "Prohibido - No tiene permisos para reservar"),
+            @ApiResponse(responseCode = "404", description = "Recurso no encontrado - Cliente, viaje o vehículo no existe"),
+            @ApiResponse(responseCode = "409", description = "Conflicto - Viaje no disponible o fechas ocupadas"),
+            @ApiResponse(responseCode = "422", description = "Entidad no procesable - Validaciones de negocio fallidas"),
+            @ApiResponse(responseCode = "423", description = "Bloqueado - Cliente con reservas pendientes "),
+            @ApiResponse(responseCode = "429", description = "Demasiadas solicitudes"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor"),
+            @ApiResponse(responseCode = "503", description = "Servicio no disponible ")
     })
     @PostMapping("/save")
     public ResponseEntity<?> crearReserva(@RequestBody ReservaDTO reservaDTO) {
@@ -39,8 +47,16 @@ public class ReservaController {
     // Consultar todas las reservas
     @Operation(summary = "Consultar reservas", description = "Obtiene la lista de todas las reservas (activas y pasadas)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Reservas obtenidas exitosamente"),
-            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+            @ApiResponse(responseCode = "200", description = "Listado de reservas obtenido exitosamente"),
+            @ApiResponse(responseCode = "204", description = "No hay reservas registradas en el sistema"),
+            @ApiResponse(responseCode = "400", description = "Parámetros de consulta inválidos"),
+            @ApiResponse(responseCode = "401", description = "No autorizado - Autenticación requerida"),
+            @ApiResponse(responseCode = "403", description = "Prohibido - Permisos insuficientes para consultar reservas"),
+            @ApiResponse(responseCode = "406", description = "Formato de respuesta no aceptable"),
+            @ApiResponse(responseCode = "416", description = "Rango no válido"),
+            @ApiResponse(responseCode = "429", description = "Demasiadas solicitudes"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor"),
+            @ApiResponse(responseCode = "503", description = "Servicio no disponible")
     })
     @GetMapping("/all")
     public ResponseEntity<Iterable<ReservaDTO>> findAll() {
@@ -51,9 +67,16 @@ public class ReservaController {
     // Consultar reservas por cliente
     @Operation(summary = "Consultar reservas por cliente", description = "Obtiene la lista de reservas de un cliente")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Reservas del cliente obtenidas exitosamente"),
-            @ApiResponse(responseCode = "404", description = "Cliente o reservas no encontrados"),
-            @ApiResponse(responseCode = "500", description = "Error en el servidor")
+            @ApiResponse(responseCode = "200", description = "Lista de reservas del cliente obtenida exitosamente"),
+            @ApiResponse(responseCode = "204", description = "El cliente no tiene reservas registradas"),
+            @ApiResponse(responseCode = "400", description = "ID de cliente inválido o mal formado"),
+            @ApiResponse(responseCode = "401", description = "No autorizado - Autenticación requerida"),
+            @ApiResponse(responseCode = "403", description = "Prohibido - No tiene permisos para ver estas reservas"),
+            @ApiResponse(responseCode = "404", description = "Cliente no encontrado"),
+            @ApiResponse(responseCode = "406", description = "Formato de respuesta no aceptable"),
+            @ApiResponse(responseCode = "429", description = "Demasiadas solicitudes"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor"),
+            @ApiResponse(responseCode = "503", description = "Servicio no disponible")
     })
     @GetMapping("/cliente/{clienteId}")
     public ResponseEntity<?> findByCliente(@PathVariable Long clienteId) {
@@ -68,10 +91,18 @@ public class ReservaController {
     // Actualizar reserva (solo si el viaje aún no inició)
     @Operation(summary = "Actualizar reserva", description = "Modifica la información de una reserva si el viaje aún no ha iniciado")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Reserva actualizada exitosamente"),
-            @ApiResponse(responseCode = "400", description = "Error en los datos o reserva no modificable"),
-            @ApiResponse(responseCode = "404", description = "Reserva no encontrada"),
-            @ApiResponse(responseCode = "500", description = "Error en el servidor")
+                    @ApiResponse(responseCode = "200", description = "Reserva actualizada exitosamente"),
+                    @ApiResponse(responseCode = "400", description = "Datos inválidos - Campos faltantes, formato incorrecto o ID nulo"),
+                    @ApiResponse(responseCode = "401", description = "No autorizado - Autenticación requerida"),
+                    @ApiResponse(responseCode = "403", description = "Prohibido - Permisos insuficientes para modificar reservas"),
+                    @ApiResponse(responseCode = "404", description = "Reserva no encontrada - ID no existe"),
+                    @ApiResponse(responseCode = "409", description = "Conflicto - Viaje ya iniciado o estado no modificable"),
+                    @ApiResponse(responseCode = "412", description = "Precondición fallida - Versión obsoleta de la reserva"),
+                    @ApiResponse(responseCode = "422", description = "Entidad no procesable - Validaciones de negocio fallidas"),
+                    @ApiResponse(responseCode = "423", description = "Bloqueado - transacción en proceso"),
+                    @ApiResponse(responseCode = "429", description = "Demasiadas solicitudes "),
+                    @ApiResponse(responseCode = "500", description = "Error interno del servidor"),
+                    @ApiResponse(responseCode = "503", description = "Servicio no disponible")
     })
     @PutMapping("/update")
     public ResponseEntity<?> actualizarReserva(@RequestBody ReservaDTO reservaDTO) {
@@ -87,9 +118,15 @@ public class ReservaController {
     @Operation(summary = "Cancelar reserva", description = "Cancela una reserva si cumple los criterios (estado Pendiente o Confirmada y el viaje no ha iniciado)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Reserva cancelada exitosamente"),
-            @ApiResponse(responseCode = "400", description = "No se puede cancelar la reserva"),
-            @ApiResponse(responseCode = "404", description = "Reserva no encontrada"),
-            @ApiResponse(responseCode = "500", description = "Error en el servidor")
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida - ID mal formado o estado no cancelable"),
+            @ApiResponse(responseCode = "401", description = "No autorizado - Autenticación requerida"),
+            @ApiResponse(responseCode = "403", description = "Prohibido - Permisos insuficientes para cancelar"),
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada - ID no existe"),
+            @ApiResponse(responseCode = "409", description = "Conflicto - Viaje ya iniciado o reserva no cancelable"),
+            @ApiResponse(responseCode = "423", description = "Bloqueado - Proceso en curso"),
+            @ApiResponse(responseCode = "429", description = "Demasiadas solicitudes "),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor"),
+            @ApiResponse(responseCode = "503", description = "Servicio no disponible")
     })
     @PatchMapping("/cancel/{id}")
     public ResponseEntity<?> cancelarReserva(@PathVariable Long id) {
@@ -104,10 +141,16 @@ public class ReservaController {
     //Eliminar reserva
     @Operation(summary = "Eliminar reserva", description = "Elimina un reserva del sistema")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Resrva eliminada"),
-            @ApiResponse(responseCode = "400", description = "No se puede eliminar la reserva"),
-            @ApiResponse(responseCode = "404", description = "Reserva no encontrada"),
-            @ApiResponse(responseCode = "500", description = "Error en el servidor")
+            @ApiResponse(responseCode = "204", description = "Reserva eliminada exitosamente - No retorna contenido"),
+            @ApiResponse(responseCode = "400", description = "Solicitud inválida - ID mal formado o reserva no eliminable"),
+            @ApiResponse(responseCode = "401", description = "No autorizado - Autenticación requerida"),
+            @ApiResponse(responseCode = "403", description = "Prohibido - Permisos insuficientes para eliminar"),
+            @ApiResponse(responseCode = "404", description = "Reserva no encontrada - ID no existe"),
+            @ApiResponse(responseCode = "409", description = "Conflicto - Reserva asociada a un viaje en progreso o completado"),
+            @ApiResponse(responseCode = "423", description = "Bloqueado - Reserva vinculada a procesos pendientes"),
+            @ApiResponse(responseCode = "429", description = "Demasiadas solicitudes "),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor"),
+            @ApiResponse(responseCode = "503", description = "Servicio no disponible")
     })
     @DeleteMapping("delete/{id}")
     public ResponseEntity<?> eliminarReserva(@PathVariable Long id) {
