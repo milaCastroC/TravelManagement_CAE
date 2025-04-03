@@ -94,6 +94,12 @@ public class ReservaService {
         ReservaDTO reservaExistente = reservaRepository.findById(reservaId)
                 .orElseThrow(() -> new IllegalArgumentException("Reserva no encontrada"));
 
+        // Validar que no esté ya cancelada (PRIMERO esta verificación)
+        EstadoReserva estadoActual = EstadoReserva.valueOf(reservaExistente.getEstado());
+        if (estadoActual == EstadoReserva.cancelado) {
+            throw new IllegalStateException("La reserva ya está cancelada");
+        }
+
         // Obtener el viaje para validar que no haya iniciado
         ViajeDTO viaje = viajeRepository.findById(reservaExistente.getViajeId())
                 .orElseThrow(() -> new IllegalArgumentException("Viaje no encontrado"));
@@ -102,15 +108,9 @@ public class ReservaService {
             throw new IllegalArgumentException("No se puede cancelar una reserva de un viaje que ya inició");
         }
 
-        // Solo se pueden cancelar reservas en estado PENDIENTE o CONFIRMADA
-        EstadoReserva estadoActual = EstadoReserva.valueOf(reservaExistente.getEstado());
+        // Validar que el estado sea cancelable
         if (!(estadoActual == EstadoReserva.pendiente || estadoActual == EstadoReserva.confirmada)) {
             throw new IllegalArgumentException("Solo se pueden cancelar reservas en estado Pendiente o Confirmada");
-        }
-
-        // Validar que no esté ya cancelada
-        if (estadoActual == EstadoReserva.cancelado) {
-            throw new IllegalStateException("La reserva ya está cancelada");
         }
 
         // Actualizamos el estado a CANCELADA

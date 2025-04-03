@@ -37,10 +37,10 @@ public class VehiculoService {
 
     //Actualizar un vehiculo
     public VehiculoDTO updateVehiculo(VehiculoDTO vehiculoDTO){
-        if(vehiculoRepository.findByPlaca(vehiculoDTO.getPlaca()) != null){
-            return vehiculoRepository.update(vehiculoDTO);
+        if(vehiculoRepository.findByPlaca(vehiculoDTO.getPlaca()).isEmpty()) {
+            throw new IllegalArgumentException("El vehiculo no existe");
         }
-        throw new IllegalArgumentException("El vehiculo no existe");
+        return vehiculoRepository.update(vehiculoDTO);
     }
 
     //Eliminar vehículo

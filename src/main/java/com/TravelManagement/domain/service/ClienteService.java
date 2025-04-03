@@ -37,10 +37,21 @@ public class ClienteService {
 
     //Actualizar un cliente
     public ClienteDTO updateCliente(ClienteDTO clienteDTO) {
-        if(clienteRepository.findByIdentificacion(clienteDTO.getIdentificacion()) != null){
-            return clienteRepository.update(clienteDTO);
+        if (clienteDTO.getIdentificacion() == null || clienteDTO.getIdentificacion().isEmpty()) {
+            throw new IllegalArgumentException("La identificación es requerida para actualizar el cliente");
         }
-        throw new IllegalArgumentException("El cliente no existe");
+
+        // Buscar el cliente existente por identificación
+        ClienteDTO clienteExistente = clienteRepository.findByIdentificacion(clienteDTO.getIdentificacion())
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con identificación: " + clienteDTO.getIdentificacion()));
+
+        // Actualizar solo los campos permitidos
+        clienteExistente.setNombre(clienteDTO.getNombre());
+        clienteExistente.setEmail(clienteDTO.getEmail());
+        clienteExistente.setTelefono(clienteDTO.getTelefono());
+
+        // Guardar el cliente actualizado
+        return clienteRepository.update(clienteExistente);
     }
 
 //    Eliminar cliente

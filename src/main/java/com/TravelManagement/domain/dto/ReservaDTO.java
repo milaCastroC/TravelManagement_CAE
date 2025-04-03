@@ -19,11 +19,11 @@ public class ReservaDTO {
     private String estado;
     private LocalDateTime fechaReserva;
 
-    public ReservaDTO(Long reservaId, Long viajeId, Long clienteId, String estado, LocalDateTime fechaReserva) {
+    /*public ReservaDTO(Long reservaId, Long viajeId, Long clienteId, String estado, LocalDateTime fechaReserva) {
         this.reservaId = reservaId;
         this.viajeId = viajeId;
         this.clienteId = clienteId;
         this.estado = estado;
         this.fechaReserva = fechaReserva;
-    }
+    }*/
 }
